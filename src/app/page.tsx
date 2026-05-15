@@ -56,7 +56,7 @@ const faq = [
   },
   {
     q: "Как се плаща?",
-    a: "Системата за плащане е в подготовка. Скоро: Stripe, Revolut и други сигурни методи.",
+    a: "През Stripe — сигурно SSL плащане с карта. Три плана: 49, 99 или 199 лв. Еднократно, без месечен абонамент. Виж всички планове на страницата „Цени“.",
   },
 ];
 
@@ -76,7 +76,7 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-10 text-sm text-gray-300 font-medium">
             <a href="#truths" className="hover:text-blue-300 transition">Истината</a>
             <a href="#modules" className="hover:text-blue-300 transition">Системата</a>
-            <a href="#change" className="hover:text-blue-300 transition">Промяната</a>
+            <Link href="/checkout" className="hover:text-blue-300 transition">Цени</Link>
             <a href="#faq" className="hover:text-blue-300 transition">FAQ</a>
           </div>
           <Link
@@ -287,13 +287,21 @@ export default function Home() {
           Влизаш веднъж. Оставаш завинаги. Никой не разбира.
         </p>
 
-        <Link
-          href="/register"
-          className="btn-primary inline-flex items-center justify-center gap-2 px-12 py-5 rounded-full font-semibold text-white text-lg"
-        >
-          Заяви достъп до Velion Lab
-          <span aria-hidden>→</span>
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            href="/checkout"
+            className="btn-primary inline-flex items-center justify-center gap-2 px-12 py-5 rounded-full font-semibold text-white text-lg"
+          >
+            Заяви достъп до Velion Lab
+            <span aria-hidden>→</span>
+          </Link>
+          <Link
+            href="/register"
+            className="btn-ghost inline-flex items-center justify-center px-8 py-5 rounded-full text-gray-200 font-medium"
+          >
+            Имам код за достъп
+          </Link>
+        </div>
       </section>
 
       {/* === FOOTER === */}
@@ -310,7 +318,7 @@ export default function Home() {
             <ul className="space-y-2.5">
               <li><a href="#truths" className="hover:text-blue-300 transition">Истината</a></li>
               <li><a href="#modules" className="hover:text-blue-300 transition">Системата</a></li>
-              <li><a href="#change" className="hover:text-blue-300 transition">Промяната</a></li>
+              <li><Link href="/checkout" className="hover:text-blue-300 transition">Цени</Link></li>
               <li><a href="#faq" className="hover:text-blue-300 transition">FAQ</a></li>
               <li><Link href="/login" className="hover:text-blue-300 transition">Вход</Link></li>
             </ul>

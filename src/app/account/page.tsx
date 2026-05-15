@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
+import { logout } from "@/app/auth/actions";
 
 // Mock данни — после ще идват от Supabase
 const mockUser = {
@@ -111,20 +112,22 @@ export default function AccountPage() {
 
         {/* === Logout / Delete === */}
         <section className="grid md:grid-cols-2 gap-4 fade-up">
-          <Link
-            href="/"
-            className="card rounded-2xl p-6 group flex items-center justify-between"
-          >
-            <div>
-              <p className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-1">
-                Изход
-              </p>
-              <p className="text-white font-semibold">Излез от профила</p>
-            </div>
-            <span aria-hidden className="text-blue-300 group-hover:translate-x-1 transition-transform">
-              →
-            </span>
-          </Link>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="card rounded-2xl p-6 group flex items-center justify-between w-full text-left"
+            >
+              <div>
+                <p className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-1">
+                  Изход
+                </p>
+                <p className="text-white font-semibold">Излез от профила</p>
+              </div>
+              <span aria-hidden className="text-blue-300 group-hover:translate-x-1 transition-transform">
+                →
+              </span>
+            </button>
+          </form>
 
           <button
             type="button"
