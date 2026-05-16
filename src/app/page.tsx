@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Logo } from "@/components/Logo";
@@ -294,8 +295,16 @@ export default function Home() {
       <div className="divider max-w-3xl mx-auto" />
 
       {/* === SECTION: PROBLEM === */}
-      <section id="problem" className="relative section-bg-1 py-28">
-        <div className="max-w-6xl mx-auto px-6">
+      <section id="problem" className="relative section-bg-1 py-28 overflow-hidden">
+        {/* Cinematic background video */}
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <HeroVideo
+            src="/visuals/problem-hero.mp4"
+            className="h-full w-full object-cover opacity-[0.18]"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(4,5,10,0.6)_0%,#04050a_85%)]" />
+        </div>
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <div className="mb-6"><AnimatedEyebrow>Проблемът</AnimatedEyebrow></div>
             <motion.h2
@@ -349,7 +358,16 @@ export default function Home() {
       <div className="divider max-w-3xl mx-auto" />
 
       {/* === SECTION I: TRUTHS === */}
-      <section id="truths" className="relative max-w-5xl mx-auto px-6 py-28">
+      <section id="truths" className="relative py-28 overflow-hidden">
+        {/* Cinematic background video */}
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <HeroVideo
+            src="/visuals/truths-hero.mp4"
+            className="h-full w-full object-cover opacity-[0.16]"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(4,5,10,0.55)_0%,#04050a_85%)]" />
+        </div>
+        <div className="max-w-5xl mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <div className="mb-6"><AnimatedEyebrow>Три истини</AnimatedEyebrow></div>
           <motion.h2
@@ -388,6 +406,7 @@ export default function Home() {
             </motion.div>
           ))}
         </motion.div>
+        </div>
       </section>
 
       <div className="divider max-w-3xl mx-auto" />
@@ -520,15 +539,32 @@ export default function Home() {
               variants={fadeUp}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ y: -6 }}
-              className="glass-strong rounded-3xl p-8"
+              className="glass-strong rounded-3xl overflow-hidden"
             >
-              <p className="text-blue-400 mb-5 text-lg tracking-[0.3em]">★★★★★</p>
-              <p className="text-gray-300 leading-relaxed italic mb-6">
-                Тук ще се появят истински отзиви, след като първите потребители завършат програмата.
-              </p>
-              <p className="text-xs text-gray-500 uppercase tracking-[0.25em] font-mono">
-                — Анонимен · Vol. {String(i).padStart(2, "0")}
-              </p>
+              <div className="relative aspect-square overflow-hidden">
+                <Image
+                  src={`/visuals/testimonial-${i}.png`}
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#04050a]" />
+                <div className="absolute bottom-4 left-5 right-5 flex items-center justify-between">
+                  <p className="text-blue-300 text-sm tracking-[0.3em]">★★★★★</p>
+                  <p className="text-[0.6rem] text-gray-400 uppercase tracking-[0.25em] font-mono">
+                    Vol. {String(i).padStart(2, "0")}
+                  </p>
+                </div>
+              </div>
+              <div className="p-8">
+                <p className="text-gray-300 leading-relaxed italic mb-6">
+                  Тук ще се появят истински отзиви, след като първите потребители завършат програмата.
+                </p>
+                <p className="text-xs text-gray-500 uppercase tracking-[0.25em] font-mono">
+                  — Анонимен · Член на клуба
+                </p>
+              </div>
             </motion.div>
           ))}
         </motion.div>
@@ -577,7 +613,17 @@ export default function Home() {
       </section>
 
       {/* === FINAL CTA === */}
-      <section className="relative max-w-4xl mx-auto px-6 py-32 text-center">
+      <section className="relative py-32 text-center overflow-hidden">
+        {/* Cinematic background video */}
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <HeroVideo
+            src="/visuals/cta-hero.mp4"
+            className="h-full w-full object-cover opacity-[0.22]"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(4,5,10,0.5)_0%,#04050a_85%)]" />
+        </div>
+
+        <div className="max-w-4xl mx-auto px-6 relative z-10">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-blue-900/15 rounded-[2.5rem] blur-3xl -z-10" />
 
         <div className="mb-8"><AnimatedEyebrow>Затворен достъп</AnimatedEyebrow></div>
@@ -618,6 +664,7 @@ export default function Home() {
             Имам код за достъп
           </CinematicCTA>
         </motion.div>
+        </div>
       </section>
 
       {/* === FOOTER === */}
