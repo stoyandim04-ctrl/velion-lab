@@ -308,3 +308,291 @@ main, nav, footer, section, header {
   color: #93c5fd;
   border-radius: 0.75rem;
 }
+
+/* ===================================================================
+   CINEMATIC UPGRADE — glass, glow, parallax, animated borders, marquee
+   =================================================================== */
+
+/* Deep premium glassmorphism */
+.glass {
+  background:
+    linear-gradient(160deg, rgba(20, 28, 50, 0.45) 0%, rgba(4, 5, 10, 0.55) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 30px 80px -40px rgba(0, 0, 0, 0.7);
+}
+
+.glass-strong {
+  background:
+    linear-gradient(160deg, rgba(20, 28, 50, 0.7) 0%, rgba(4, 5, 10, 0.85) 100%);
+  border: 1px solid rgba(96, 165, 250, 0.14);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+}
+
+/* Animated gradient border */
+.gradient-border {
+  position: relative;
+  isolation: isolate;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    rgba(59, 130, 246, 0) 0%,
+    rgba(96, 165, 250, 0.55) 25%,
+    rgba(147, 197, 253, 0.9) 50%,
+    rgba(96, 165, 250, 0.55) 75%,
+    rgba(59, 130, 246, 0) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: spin-conic 6s linear infinite;
+  pointer-events: none;
+  opacity: 0.55;
+}
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes spin-conic {
+  to { --angle: 360deg; }
+}
+
+/* Glowing CTA — premium electric pulse */
+.btn-cinematic {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background:
+    linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(147, 197, 253, 0.4),
+    inset 0 0 0 1px rgba(96, 165, 250, 0.45),
+    0 0 30px rgba(59, 130, 246, 0.45),
+    0 20px 60px -15px rgba(59, 130, 246, 0.55);
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-cinematic::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(147, 197, 253, 0.9) 50%,
+    transparent 100%
+  );
+  animation: spin-conic 4s linear infinite;
+  z-index: -1;
+  opacity: 0.55;
+}
+.btn-cinematic::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+  z-index: -1;
+}
+.btn-cinematic:hover {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow:
+    inset 0 1px 0 rgba(147, 197, 253, 0.5),
+    inset 0 0 0 1px rgba(147, 197, 253, 0.6),
+    0 0 55px rgba(59, 130, 246, 0.7),
+    0 25px 70px -15px rgba(59, 130, 246, 0.85);
+}
+.btn-cinematic:active { transform: translateY(0) scale(0.99); }
+
+/* Shimmer sweep across button on hover */
+.btn-cinematic .shimmer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-cinematic:hover .shimmer { transform: translateX(120%); }
+
+/* Ghost cinematic */
+.btn-ghost-cinematic {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-ghost-cinematic:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(147, 197, 253, 0.35);
+  color: #f1f5f9;
+  box-shadow: 0 0 35px -10px rgba(96, 165, 250, 0.4);
+}
+
+/* Glowing orb — drifts on parallax */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  will-change: transform;
+}
+.orb-blue   { background: radial-gradient(circle, rgba(59, 130, 246, 0.55), transparent 65%); }
+.orb-deep   { background: radial-gradient(circle, rgba(15, 29, 74, 0.65), transparent 65%); }
+.orb-bright { background: radial-gradient(circle, rgba(147, 197, 253, 0.35), transparent 65%); }
+
+/* Cinematic grid backdrop */
+.grid-floor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(96, 165, 250, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 165, 250, 0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, #000 25%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, #000 25%, transparent 75%);
+}
+
+/* Marquee — infinite logo/text band */
+.marquee {
+  display: flex;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee__track {
+  display: flex;
+  gap: 4rem;
+  animation: marquee 38s linear infinite;
+  white-space: nowrap;
+  padding-right: 4rem;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Animated gradient text — cycles slowly */
+.shimmer-text {
+  background: linear-gradient(
+    110deg,
+    #ffffff 0%, #d4d4d8 30%, #93c5fd 50%, #d4d4d8 70%, #ffffff 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-pan 6s linear infinite;
+}
+@keyframes shimmer-pan {
+  to { background-position: -200% center; }
+}
+
+/* Glow pulse — for status dots / signals */
+.glow-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.9);
+}
+.glow-dot::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(96, 165, 250, 0.5);
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Hero number ticker */
+.ticker-digit {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tilt card on hover (subtle 3D) */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tilt-card:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-4px);
+}
+
+/* Reveal-on-scroll base (GSAP toggles .is-visible) */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Premium ring progress */
+.ring-glow {
+  filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.55));
+}
+
+/* Mobile polish */
+@media (max-width: 640px) {
+  .btn-cinematic, .btn-ghost-cinematic {
+    padding: 0.85rem 1.4rem;
+    width: 100%;
+  }
+  .grid-floor { background-size: 40px 40px; }
+  .orb { filter: blur(55px); }
+}
+
+/* Respect users who don't want motion */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-border::before,
+  .btn-cinematic::before,
+  .marquee__track,
+  .shimmer-text,
+  .glow-dot::after {
+    animation: none !important;
+  }
+}

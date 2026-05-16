@@ -1,9 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { Logo } from "@/components/Logo";
-import { buttonVariants } from "@/components/ui/button";
+import {
+  Counter,
+  MouseParallax,
+  ParallaxLayer,
+  ScrollProgressBar,
+} from "@/components/Cinematic";
 
 const modules = [
   { id: "I",    title: "Защо свършваш бързо",            desc: "Истинската причина — без митове и без оправдания." },
@@ -17,21 +23,9 @@ const modules = [
 ];
 
 const truths = [
-  {
-    n: "I",
-    t: "Първото поражение",
-    d: "Помниш я. Тя не помни теб. Срамът остава по-дълго от акта.",
-  },
-  {
-    n: "II",
-    t: "Тревогата те предава",
-    d: "Мислиш дали ще успееш — а вече си изгубил. Мозъкът ти удря преди тялото.",
-  },
-  {
-    n: "III",
-    t: "Никой не те научи",
-    d: "Бащата мълчи. Училището премълчава. Порното лъже. Сега си сам.",
-  },
+  { n: "I",   t: "Първото поражение",   d: "Помниш я. Тя не помни теб. Срамът остава по-дълго от акта." },
+  { n: "II",  t: "Тревогата те предава", d: "Мислиш дали ще успееш — а вече си изгубил. Мозъкът ти удря преди тялото." },
+  { n: "III", t: "Никой не те научи",    d: "Бащата мълчи. Училището премълчава. Порното лъже. Сега си сам." },
 ];
 
 const transformations = [
@@ -42,83 +36,36 @@ const transformations = [
 ];
 
 const heroStats = [
-  { value: "8",   label: "Модула",          sub: "Подредени стъпка по стъпка" },
-  { value: "24+", label: "Урока",           sub: "По 3 урока във всеки модул" },
-  { value: "10",  label: "Мин дневна практика", sub: "Кратко, но всеки ден" },
+  { value: 8,   suffix: "",  label: "Модула",              sub: "Подредени стъпка по стъпка" },
+  { value: 24,  suffix: "+", label: "Урока",               sub: "По 3 урока във всеки модул" },
+  { value: 10,  suffix: "",  label: "Мин дневна практика", sub: "Кратко, но всеки ден" },
 ];
 
 const problems = [
-  {
-    n: "I",
-    t: "Липса на осъзнаване",
-    d: "Не виждаш кога нивото се качва. Реагираш едва когато е твърде късно.",
-  },
-  {
-    n: "II",
-    t: "Прекалено високо напрежение",
-    d: "Тялото ти е свито като пружина. Натрупаното напрежение работи срещу теб.",
-  },
-  {
-    n: "III",
-    t: "Срам и страх",
-    d: "Мислиш — ще успея ли — и вече си изгубил. Главата ти удря преди тялото.",
-  },
-  {
-    n: "IV",
-    t: "Слаба връзка тяло-нервна система",
-    d: "Не чуваш сигналите. Не управляваш дишането. Тялото те води, не обратното.",
-  },
+  { n: "I",   t: "Липса на осъзнаване",                  d: "Не виждаш кога нивото се качва. Реагираш едва когато е твърде късно." },
+  { n: "II",  t: "Прекалено високо напрежение",          d: "Тялото ти е свито като пружина. Натрупаното напрежение работи срещу теб." },
+  { n: "III", t: "Срам и страх",                          d: "Мислиш — ще успея ли — и вече си изгубил. Главата ти удря преди тялото." },
+  { n: "IV",  t: "Слаба връзка тяло-нервна система",     d: "Не чуваш сигналите. Не управляваш дишането. Тялото те води, не обратното." },
 ];
 
 const faq = [
-  {
-    q: "Това работи ли наистина?",
-    a: "Не обещаваме магия. Това е тренировъчна система — както за фитнес, така и за контрол. Резултатите зависят от практиката. Първите видими промени — в първите 2-3 седмици.",
-  },
-  {
-    q: "Колко време ще ми отнеме?",
-    a: "10-20 минути дневно. Можеш да учиш по 1 модул на седмица или всичко наведнъж. Достъпът е пожизнен.",
-  },
-  {
-    q: "Има ли нужда да говоря с някого?",
-    a: "Не. Програмата е изцяло само за теб. Никакви групови чатове. Никакви разкрития. Поверителността е стълб на Velion Lab.",
-  },
-  {
-    q: "Какво ако не работи?",
-    a: "Velion Lab не е лекарство и не замества лекар. Ако имаш медицинско състояние — консултирай се със специалист. Програмата е образователна — техники, дисциплина, осъзнаване.",
-  },
-  {
-    q: "Как се плаща?",
-    a: "През Stripe — сигурно SSL плащане с карта. Три плана: 49, 99 или 199 лв. Еднократно, без месечен абонамент. Виж всички планове на страницата Цени.",
-  },
+  { q: "Това работи ли наистина?", a: "Не обещаваме магия. Това е тренировъчна система — както за фитнес, така и за контрол. Резултатите зависят от практиката. Първите видими промени — в първите 2-3 седмици." },
+  { q: "Колко време ще ми отнеме?", a: "10-20 минути дневно. Можеш да учиш по 1 модул на седмица или всичко наведнъж. Достъпът е пожизнен." },
+  { q: "Има ли нужда да говоря с някого?", a: "Не. Програмата е изцяло само за теб. Никакви групови чатове. Никакви разкрития. Поверителността е стълб на Velion Lab." },
+  { q: "Какво ако не работи?", a: "Velion Lab не е лекарство и не замества лекар. Ако имаш медицинско състояние — консултирай се със специалист. Програмата е образователна — техники, дисциплина, осъзнаване." },
+  { q: "Как се плаща?", a: "През Stripe — сигурно SSL плащане с карта. Три плана: 49, 99 или 199 лв. Еднократно, без месечен абонамент. Виж всички планове на страницата Цени." },
 ];
 
-// Reusable motion variants
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0 },
-};
+const marqueeWords = [
+  "Контрол", "Присъствие", "Тишина", "Дисциплина",
+  "Поверителност", "Излъчване", "Свобода", "Време",
+];
 
-const heroContainer = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
-  },
-};
+const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
+const heroContainer = { hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } };
+const cardContainer = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } };
+const eyebrowLine = { hidden: { scaleX: 0 }, visible: { scaleX: 1 } };
 
-const cardContainer = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08 },
-  },
-};
-
-const eyebrowLine = {
-  hidden: { scaleX: 0 },
-  visible: { scaleX: 1 },
-};
-
-// Animated eyebrow — line expand from 0 to 100%
 function AnimatedEyebrow({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
@@ -127,22 +74,13 @@ function AnimatedEyebrow({ children }: { children: React.ReactNode }) {
       viewport={{ once: true, amount: 0.6 }}
       className="inline-flex items-center gap-3 text-[0.7rem] tracking-[0.3em] uppercase text-blue-300/90 font-mono"
     >
-      <motion.span
-        variants={eyebrowLine}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="block h-px w-7 bg-gradient-to-r from-transparent to-blue-400/50 origin-right"
-      />
+      <motion.span variants={eyebrowLine} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} className="block h-px w-7 bg-gradient-to-r from-transparent to-blue-400/50 origin-right" />
       <span>{children}</span>
-      <motion.span
-        variants={eyebrowLine}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="block h-px w-7 bg-gradient-to-l from-transparent to-blue-400/50 origin-left"
-      />
+      <motion.span variants={eyebrowLine} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} className="block h-px w-7 bg-gradient-to-l from-transparent to-blue-400/50 origin-left" />
     </motion.div>
   );
 }
 
-// Number badge with rotate-in animation
 function AnimatedNumBadge({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <motion.div
@@ -157,12 +95,45 @@ function AnimatedNumBadge({ children, className = "" }: { children: React.ReactN
   );
 }
 
+function CinematicCTA({ href, children, variant = "primary" }: { href: string; children: React.ReactNode; variant?: "primary" | "ghost" }) {
+  if (variant === "ghost") {
+    return (
+      <Link href={href} className="btn-ghost-cinematic">
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <Link href={href} className="btn-cinematic">
+      <span className="shimmer" />
+      <span className="relative z-[1] inline-flex items-center gap-2">{children}</span>
+    </Link>
+  );
+}
+
 export default function Home() {
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.15]);
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.96]);
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
+
   return (
     <main className="relative w-full overflow-hidden">
-      {/* === Spotlights === */}
-      <div className="spotlight" style={{ width: "700px", height: "700px", background: "rgba(30, 58, 138, 0.35)", top: "-200px", left: "50%", transform: "translateX(-50%)" }} />
-      <div className="spotlight" style={{ width: "500px", height: "500px", background: "rgba(59, 130, 246, 0.2)", top: "400px", right: "-150px" }} />
+      <ScrollProgressBar />
+
+      {/* === Cinematic ambient orbs (parallax) === */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <ParallaxLayer speed={0.4} className="absolute inset-0">
+          <div className="orb orb-blue" style={{ width: 720, height: 720, top: -260, left: "50%", transform: "translateX(-50%)" }} />
+        </ParallaxLayer>
+        <ParallaxLayer speed={0.25} className="absolute inset-0">
+          <div className="orb orb-deep" style={{ width: 540, height: 540, top: 380, right: -160 }} />
+        </ParallaxLayer>
+        <ParallaxLayer speed={0.55} className="absolute inset-0">
+          <div className="orb orb-bright" style={{ width: 420, height: 420, top: 1200, left: -120 }} />
+        </ParallaxLayer>
+      </div>
 
       {/* === Navbar === */}
       <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/60 border-b border-white/5">
@@ -176,29 +147,30 @@ export default function Home() {
             <Link href="/checkout" className="hover:text-blue-300 transition">Цени</Link>
             <a href="#faq" className="hover:text-blue-300 transition">FAQ</a>
           </div>
-          <Link
-            href="/login"
-            className="text-sm text-gray-300 hover:text-blue-300 transition"
-          >
+          <Link href="/login" className="text-sm text-gray-300 hover:text-blue-300 transition">
             Вход →
           </Link>
         </div>
       </nav>
 
       {/* === HERO === */}
-      <section className="relative max-w-6xl mx-auto px-6 pt-16 md:pt-24 pb-24 text-center">
-        <motion.div
-          variants={heroContainer}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Logo as hero centerpiece */}
+      <motion.section
+        ref={heroRef}
+        style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
+        className="relative max-w-6xl mx-auto px-6 pt-16 md:pt-24 pb-24 text-center"
+      >
+        {/* Decorative grid floor */}
+        <div className="grid-floor opacity-50" />
+
+        <motion.div variants={heroContainer} initial="hidden" animate="visible">
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="flex justify-center mb-12"
+            className="flex justify-center mb-10"
           >
-            <Logo variant="full" className="drop-shadow-[0_0_60px_rgba(59,130,246,0.3)]" />
+            <MouseParallax strength={10}>
+              <Logo variant="full" className="drop-shadow-[0_0_80px_rgba(59,130,246,0.45)]" />
+            </MouseParallax>
           </motion.div>
 
           <motion.div
@@ -206,19 +178,8 @@ export default function Home() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="inline-flex items-center gap-3 mb-8 text-xs tracking-[0.35em] text-blue-300/80 font-mono uppercase"
           >
-            <motion.span
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="block h-px w-6 bg-blue-400/40 origin-right"
-            />
+            <span className="glow-dot" />
             Затворен Клуб · За Мъжете
-            <motion.span
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="block h-px w-6 bg-blue-400/40 origin-left"
-            />
           </motion.div>
 
           <motion.h1
@@ -226,7 +187,7 @@ export default function Home() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-6 max-w-4xl mx-auto"
           >
-            <span className="silver-text">Бавният мъж владее.</span>
+            <span className="shimmer-text">Бавният мъж владее.</span>
             <br />
             <span className="blue-text">Бързият — обяснява.</span>
           </motion.h1>
@@ -254,36 +215,17 @@ export default function Home() {
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                href="/register"
-                className={buttonVariants({
-                  variant: "default",
-                  className:
-                    "btn-primary inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-white text-base h-auto bg-transparent",
-                })}
-              >
-                Заяви достъп
-                <span aria-hidden>→</span>
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <a
-                href="#truths"
-                className={buttonVariants({
-                  variant: "outline",
-                  className:
-                    "btn-ghost inline-flex items-center justify-center px-8 py-4 rounded-full text-gray-200 font-medium h-auto border-0 bg-transparent",
-                })}
-              >
-                Защо съществува
-              </a>
-            </motion.div>
+            <CinematicCTA href="/register">
+              Заяви достъп <span aria-hidden>→</span>
+            </CinematicCTA>
+            <CinematicCTA href="#truths" variant="ghost">
+              Защо съществува
+            </CinematicCTA>
           </motion.div>
 
-          {/* Hero stat cards — premium */}
+          {/* Hero stat cards */}
           <motion.div
             variants={cardContainer}
             initial="hidden"
@@ -296,20 +238,19 @@ export default function Home() {
                 key={s.label}
                 variants={fadeUp}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="stat-card rounded-2xl p-7 text-center"
+                className="glass tilt-card rounded-2xl p-7 text-center relative"
               >
                 <p className="text-[0.7rem] tracking-[0.3em] uppercase text-blue-300/70 font-mono mb-4">
                   {s.label}
                 </p>
                 <p className="silver-text text-6xl md:text-7xl font-bold leading-none mb-3">
-                  {s.value}
+                  <Counter to={s.value} suffix={s.suffix} />
                 </p>
                 <p className="text-xs text-gray-500 tracking-wide">{s.sub}</p>
               </motion.div>
             ))}
           </motion.div>
 
-          {/* Trust strip — minimal, like a luxury brand */}
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -320,7 +261,21 @@ export default function Home() {
             <span>· Без чужди очи</span>
           </motion.div>
         </motion.div>
-      </section>
+      </motion.section>
+
+      {/* === Marquee band === */}
+      <div className="relative py-10 border-y border-white/5 bg-black/20 backdrop-blur-sm">
+        <div className="marquee">
+          <div className="marquee__track text-3xl md:text-5xl font-bold tracking-tight">
+            {[...marqueeWords, ...marqueeWords].map((w, i) => (
+              <span key={i} className="flex items-center gap-12 text-white/[0.07] uppercase">
+                {w}
+                <span className="text-blue-400/40 text-2xl">◆</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <div className="divider max-w-3xl mx-auto" />
 
@@ -363,8 +318,11 @@ export default function Home() {
                 key={p.n}
                 variants={fadeUp}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="problem-card rounded-2xl p-7"
+                whileHover={{ y: -6 }}
+                className="glass tilt-card rounded-2xl p-7 relative overflow-hidden"
               >
+                <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                     style={{ background: "radial-gradient(circle at 50% 0%, rgba(59,130,246,0.15), transparent 70%)" }} />
                 <AnimatedNumBadge className="mb-5">{p.n}</AnimatedNumBadge>
                 <h3 className="text-lg font-semibold text-white mt-5 mb-3 leading-snug">{p.t}</h3>
                 <p className="text-gray-400 leading-relaxed text-[0.92rem]">{p.d}</p>
@@ -407,7 +365,8 @@ export default function Home() {
               key={t.n}
               variants={fadeUp}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="card rounded-3xl p-8"
+              whileHover={{ y: -6 }}
+              className="glass-strong rounded-3xl p-8"
             >
               <AnimatedNumBadge className="mb-6">{t.n}</AnimatedNumBadge>
               <h3 className="text-xl font-semibold mb-3 text-white mt-6">{t.t}</h3>
@@ -447,7 +406,8 @@ export default function Home() {
               key={b.t}
               variants={fadeUp}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="card rounded-3xl p-8 text-center"
+              whileHover={{ y: -6 }}
+              className="glass rounded-3xl p-8 text-center relative overflow-hidden"
             >
               <p className="text-blue-400/40 font-mono text-sm mb-4 tracking-widest">
                 {String(i + 1).padStart(2, "0")}
@@ -493,16 +453,20 @@ export default function Home() {
           viewport={{ once: true, amount: 0.1 }}
           className="grid md:grid-cols-2 gap-5"
         >
-          {modules.map((m) => (
+          {modules.map((m, i) => (
             <motion.div
               key={m.id}
               variants={fadeUp}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="card rounded-2xl p-6 flex gap-5 items-start"
+              whileHover={{ y: -4, scale: 1.01 }}
+              className="glass rounded-2xl p-6 flex gap-5 items-start relative overflow-hidden group"
             >
+              <span className="absolute top-3 right-4 font-mono text-[0.65rem] tracking-[0.3em] uppercase text-blue-300/30">
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <AnimatedNumBadge className="shrink-0">{m.id}</AnimatedNumBadge>
               <div>
-                <h3 className="font-semibold text-lg mb-1 text-white">{m.title}</h3>
+                <h3 className="font-semibold text-lg mb-1 text-white group-hover:text-blue-200 transition">{m.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{m.desc}</p>
               </div>
             </motion.div>
@@ -541,7 +505,8 @@ export default function Home() {
               key={i}
               variants={fadeUp}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="card rounded-3xl p-8"
+              whileHover={{ y: -6 }}
+              className="glass-strong rounded-3xl p-8"
             >
               <p className="text-blue-400 mb-5 text-lg tracking-[0.3em]">★★★★★</p>
               <p className="text-gray-300 leading-relaxed italic mb-6">
@@ -585,7 +550,7 @@ export default function Home() {
               key={i}
               variants={fadeUp}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="card rounded-2xl p-6 group cursor-pointer"
+              className="glass rounded-2xl p-6 group cursor-pointer"
             >
               <summary className="font-semibold text-lg list-none flex items-center justify-between gap-4 text-white">
                 {item.q}
@@ -630,38 +595,19 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Link
-              href="/checkout"
-              className={buttonVariants({
-                variant: "default",
-                className:
-                  "btn-primary inline-flex items-center justify-center gap-2 px-12 py-5 rounded-full font-semibold text-white text-lg h-auto bg-transparent",
-              })}
-            >
-              Заяви достъп до Velion Lab
-              <span aria-hidden>→</span>
-            </Link>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Link
-              href="/register"
-              className={buttonVariants({
-                variant: "outline",
-                className:
-                  "btn-ghost inline-flex items-center justify-center px-8 py-5 rounded-full text-gray-200 font-medium h-auto border-0 bg-transparent",
-              })}
-            >
-              Имам код за достъп
-            </Link>
-          </motion.div>
+          <CinematicCTA href="/checkout">
+            Заяви достъп до Velion Lab <span aria-hidden>→</span>
+          </CinematicCTA>
+          <CinematicCTA href="/register" variant="ghost">
+            Имам код за достъп
+          </CinematicCTA>
         </motion.div>
       </section>
 
       {/* === FOOTER === */}
-      <footer className="border-t border-white/5 py-16">
+      <footer className="border-t border-white/5 py-16 relative z-10">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10 text-sm text-gray-500">
           <div>
             <div className="mb-4"><Logo /></div>
