@@ -41,6 +41,35 @@ const transformations = [
   { t: "Свобода",    d: "Никой не пита. Никой не разбира." },
 ];
 
+const heroStats = [
+  { value: "8",   label: "Модула",          sub: "Подредени стъпка по стъпка" },
+  { value: "24+", label: "Урока",           sub: "По 3 урока във всеки модул" },
+  { value: "10",  label: "Мин дневна практика", sub: "Кратко, но всеки ден" },
+];
+
+const problems = [
+  {
+    n: "I",
+    t: "Липса на осъзнаване",
+    d: "Не виждаш кога нивото се качва. Реагираш едва когато е твърде късно.",
+  },
+  {
+    n: "II",
+    t: "Прекалено високо напрежение",
+    d: "Тялото ти е свито като пружина. Натрупаното напрежение работи срещу теб.",
+  },
+  {
+    n: "III",
+    t: "Срам и страх",
+    d: "Мислиш — ще успея ли — и вече си изгубил. Главата ти удря преди тялото.",
+  },
+  {
+    n: "IV",
+    t: "Слаба връзка тяло-нервна система",
+    d: "Не чуваш сигналите. Не управляваш дишането. Тялото те води, не обратното.",
+  },
+];
+
 const faq = [
   {
     q: "Това работи ли наистина?",
@@ -195,12 +224,21 @@ export default function Home() {
           <motion.h1
             variants={fadeUp}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-8 max-w-4xl mx-auto"
+            className="text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-6 max-w-4xl mx-auto"
           >
             <span className="silver-text">Бавният мъж владее.</span>
             <br />
             <span className="blue-text">Бързият — обяснява.</span>
           </motion.h1>
+
+          <motion.p
+            variants={fadeUp}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-2xl mx-auto text-base md:text-lg text-blue-200/70 font-light tracking-wide mb-8"
+          >
+            Premium програма за мъже, които искат контрол —{" "}
+            <span className="text-white/90">без срам и хаос.</span>
+          </motion.p>
 
           <motion.p
             variants={fadeUp}
@@ -245,18 +283,95 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
+          {/* Hero stat cards — premium */}
+          <motion.div
+            variants={cardContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto"
+          >
+            {heroStats.map((s) => (
+              <motion.div
+                key={s.label}
+                variants={fadeUp}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="stat-card rounded-2xl p-7 text-center"
+              >
+                <p className="text-[0.7rem] tracking-[0.3em] uppercase text-blue-300/70 font-mono mb-4">
+                  {s.label}
+                </p>
+                <p className="silver-text text-6xl md:text-7xl font-bold leading-none mb-3">
+                  {s.value}
+                </p>
+                <p className="text-xs text-gray-500 tracking-wide">{s.sub}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+
           {/* Trust strip — minimal, like a luxury brand */}
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-24 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-[0.7rem] uppercase tracking-[0.3em] text-gray-600 font-mono"
+            className="mt-16 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-[0.7rem] uppercase tracking-[0.3em] text-gray-600 font-mono"
           >
-            <span>· 8 модула</span>
-            <span>· 40+ урока</span>
-            <span>· пожизнен достъп</span>
+            <span>· Пожизнен достъп</span>
             <span>· 100% поверителност</span>
+            <span>· Без чужди очи</span>
           </motion.div>
         </motion.div>
+      </section>
+
+      <div className="divider max-w-3xl mx-auto" />
+
+      {/* === SECTION: PROBLEM === */}
+      <section id="problem" className="relative section-bg-1 py-28">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="mb-6"><AnimatedEyebrow>Проблемът</AnimatedEyebrow></div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-4xl md:text-5xl font-bold leading-[1.1] max-w-3xl mx-auto"
+            >
+              <span className="silver-text">Проблемът рядко е</span>
+              <br />
+              <span className="blue-text">само физически.</span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed"
+            >
+              Тялото следва главата. А главата следва навиците, които никой не ти е показал.
+            </motion.p>
+          </div>
+
+          <motion.div
+            variants={cardContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"
+          >
+            {problems.map((p) => (
+              <motion.div
+                key={p.n}
+                variants={fadeUp}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="problem-card rounded-2xl p-7"
+              >
+                <AnimatedNumBadge className="mb-5">{p.n}</AnimatedNumBadge>
+                <h3 className="text-lg font-semibold text-white mt-5 mb-3 leading-snug">{p.t}</h3>
+                <p className="text-gray-400 leading-relaxed text-[0.92rem]">{p.d}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       <div className="divider max-w-3xl mx-auto" />
@@ -305,7 +420,7 @@ export default function Home() {
       <div className="divider max-w-3xl mx-auto" />
 
       {/* === SECTION II: CHANGE === */}
-      <section id="change" className="relative max-w-6xl mx-auto px-6 py-28">
+      <section id="change" className="relative section-bg-3 max-w-6xl mx-auto px-6 py-28">
         <div className="text-center mb-16">
           <div className="mb-6"><AnimatedEyebrow>Какво се променя</AnimatedEyebrow></div>
           <motion.h2
@@ -347,7 +462,7 @@ export default function Home() {
       <div className="divider max-w-3xl mx-auto" />
 
       {/* === SECTION III: MODULES === */}
-      <section id="modules" className="relative max-w-6xl mx-auto px-6 py-28">
+      <section id="modules" className="relative section-bg-2 max-w-6xl mx-auto px-6 py-28">
         <div className="text-center mb-16">
           <div className="mb-6"><AnimatedEyebrow>Системата</AnimatedEyebrow></div>
           <motion.h2

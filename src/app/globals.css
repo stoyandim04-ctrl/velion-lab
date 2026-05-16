@@ -51,13 +51,42 @@ html, body {
   overflow-x: hidden;
 }
 
-/* Cinematic background — vignette + subtle ambient blue */
+/* Cinematic background — vignette + subtle ambient blue + film grain */
 body {
   background-image:
-    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(30, 58, 138, 0.18), transparent 70%),
-    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(37, 99, 235, 0.08), transparent 70%),
-    radial-gradient(ellipse 50% 50% at 0% 30%, rgba(15, 29, 74, 0.4), transparent 60%);
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgba(30, 58, 138, 0.22), transparent 70%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(37, 99, 235, 0.10), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 0% 30%, rgba(15, 29, 74, 0.45), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 100% 60%, rgba(29, 78, 216, 0.18), transparent 65%);
   background-attachment: fixed;
+}
+
+/* Tom Ford-style film grain overlay (SVG noise) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Vignette at the edges for cinema feel */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 100% 70% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* Make app content sit above the grain/vignette layers */
+main, nav, footer, section, header {
+  position: relative;
+  z-index: 2;
 }
 
 ::selection {
@@ -194,6 +223,74 @@ body {
 .v-line {
   width: 1px;
   background: linear-gradient(180deg, transparent, rgba(96, 165, 250, 0.4), transparent);
+}
+
+/* === Hero stat card === */
+.stat-card {
+  position: relative;
+  background: linear-gradient(165deg, rgba(15, 23, 42, 0.55) 0%, rgba(4, 5, 10, 0.7) 100%);
+  border: 1px solid rgba(96, 165, 250, 0.12);
+  backdrop-filter: blur(14px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.18), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.stat-card:hover {
+  border-color: rgba(96, 165, 250, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 60px -20px rgba(59, 130, 246, 0.35);
+}
+.stat-card:hover::before { opacity: 1; }
+
+/* === Problem card with blue glow on hover === */
+.problem-card {
+  position: relative;
+  background: linear-gradient(160deg, rgba(15, 23, 42, 0.45) 0%, rgba(4, 5, 10, 0.65) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.problem-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0) 0%, rgba(96, 165, 250, 0.5) 50%, rgba(96, 165, 250, 0) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.problem-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 60px -25px rgba(59, 130, 246, 0.5), 0 0 40px -15px rgba(59, 130, 246, 0.4);
+}
+.problem-card:hover::after { opacity: 1; }
+
+/* === Section ambient backgrounds === */
+.section-bg-1 {
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(30, 58, 138, 0.12), transparent 70%);
+}
+.section-bg-2 {
+  background:
+    radial-gradient(ellipse 50% 50% at 0% 50%, rgba(37, 99, 235, 0.10), transparent 65%),
+    radial-gradient(ellipse 50% 50% at 100% 50%, rgba(15, 29, 74, 0.18), transparent 65%);
+}
+.section-bg-3 {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(59, 130, 246, 0.10), transparent 70%);
 }
 
 /* === Number badge === */

@@ -5,10 +5,14 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Routes, до които може само логнат потребител
-const PROTECTED = ["/dashboard", "/modules", "/lessons", "/exercises", "/progress", "/account"];
+const PROTECTED = ["/dashboard", "/modules", "/lessons", "/exercises", "/progress", "/account", "/admin"];
 
 // Routes, до които НЕ трябва да достигне логнат потребител (login страници)
 const AUTH_ONLY = ["/login", "/register", "/forgot-password"];
+
+// Routes, до които може само admin (по email)
+const ADMIN_ONLY = ["/admin"];
+const ADMIN_EMAIL = "stoyan.dim04@gmail.com";
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -40,12 +44,20 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isProtected = PROTECTED.some((p) => path.startsWith(p));
   const isAuthOnly = AUTH_ONLY.some((p) => path.startsWith(p));
+  const isAdminOnly = ADMIN_ONLY.some((p) => path.startsWith(p));
 
   // Без логин — пращаме към /login
   if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", path);
+    return NextResponse.redirect(url);
+  }
+
+  // Admin route — само за стопанина
+  if (isAdminOnly && user?.email !== ADMIN_EMAIL) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
