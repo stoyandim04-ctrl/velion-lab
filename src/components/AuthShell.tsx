@@ -1,6 +1,8 @@
 // Споделена обвивка за login / register / forgot password страниците.
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 type Props = {
   children: React.ReactNode;
@@ -73,7 +75,7 @@ export function AuthInput({
       >
         {label}
       </label>
-      <input
+      <Input
         id={id}
         type={type}
         name={name}
@@ -81,7 +83,12 @@ export function AuthInput({
         required={required}
         autoComplete={autoComplete}
         minLength={minLength}
-        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-400 focus:bg-white/10 transition text-base cursor-text"
+        className={cn(
+          "w-full !h-auto px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-600 text-base cursor-text",
+          "transition-colors duration-200",
+          "focus-visible:outline-none focus-visible:ring-0 focus-visible:border-blue-400 focus-visible:bg-white/10",
+          "dark:bg-white/5",
+        )}
       />
     </div>
   );

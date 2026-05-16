@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthShell, AuthInput } from "@/components/AuthShell";
 import { createClient } from "@/lib/supabase/client";
+import { buttonVariants } from "@/components/ui/button";
 
 const hasSupabase =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -90,7 +91,11 @@ export default function RegisterPage() {
         <button
           type="submit"
           disabled={loading}
-          className="btn-primary w-full px-6 py-3.5 rounded-xl font-semibold text-white disabled:opacity-60"
+          className={buttonVariants({
+            variant: "default",
+            className:
+              "btn-primary w-full px-6 py-3.5 rounded-xl font-semibold text-white text-base h-auto bg-transparent disabled:opacity-60 disabled:cursor-not-allowed",
+          })}
         >
           {loading ? "Създавам..." : "Заяви достъп"}
         </button>

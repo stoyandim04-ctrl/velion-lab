@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { logout } from "@/app/auth/actions";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const nav = [
   { href: "/dashboard",  label: "Начало" },
@@ -35,10 +36,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-4">
             <Link
               href="/account"
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-700 to-blue-900 border border-blue-400/30 flex items-center justify-center text-sm font-semibold text-blue-200 hover:border-blue-400/60 transition"
+              className="block rounded-full transition hover:scale-105"
               title="Профил"
             >
-              И
+              <Avatar
+                size="default"
+                className="size-9 ring-1 ring-blue-400/30 hover:ring-blue-400/60 transition after:hidden"
+              >
+                <AvatarFallback className="bg-gradient-to-br from-blue-700 to-blue-900 text-sm font-semibold text-blue-200">
+                  И
+                </AvatarFallback>
+              </Avatar>
             </Link>
             <form action={logout} className="hidden md:block">
               <button
