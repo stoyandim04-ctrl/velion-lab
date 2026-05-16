@@ -6,6 +6,7 @@ import { AppShell } from "@/components/AppShell";
 import { modules, exercises } from "@/lib/content";
 import { ProgressRing } from "@/components/ProgressRing";
 import { ParallaxLayer } from "@/components/Cinematic";
+import { ModuleArtwork } from "@/components/ModuleArtwork";
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } };
 const cardContainer = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
@@ -219,30 +220,38 @@ export default function DashboardPage() {
                 whileHover={{ y: -6 }}
               >
                 <Link href={`/modules/${mod.id}`} className="block group">
-                  <div className="glass tilt-card rounded-2xl p-7 h-full flex flex-col relative overflow-hidden">
-                    <div className="absolute top-4 right-4 text-[0.6rem] font-mono uppercase tracking-[0.3em] text-blue-300/30">
-                      {mod.number}
-                    </div>
-                    <div className="flex items-center justify-between mb-5">
-                      <div className="num-badge">{mod.number}</div>
-                      <span className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500">
-                        {mod.lessons.length} урока
-                      </span>
+                  <div className="glass tilt-card rounded-2xl h-full flex flex-col relative overflow-hidden">
+                    {/* Artwork header */}
+                    <div className="relative h-28 md:h-32 overflow-hidden">
+                      <ModuleArtwork moduleId={mod.id} className="absolute inset-0" intensity="subtle" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#080a14]/90" />
+                      <div className="absolute top-4 right-4 text-[0.6rem] font-mono uppercase tracking-[0.3em] text-blue-300/40">
+                        {mod.number}
+                      </div>
                     </div>
 
-                    <h3 className="text-xl font-semibold text-white leading-snug mb-2 group-hover:text-blue-200 transition">
-                      {mod.title}
-                    </h3>
-                    <p className="text-sm text-gray-500 font-mono tracking-wide uppercase mb-3">
-                      {mod.subtitle}
-                    </p>
-                    <p className="text-gray-400 text-sm leading-relaxed flex-1">
-                      {mod.description}
-                    </p>
+                    <div className="p-7 flex flex-col flex-1">
+                      <div className="flex items-center justify-between mb-5">
+                        <div className="num-badge">{mod.number}</div>
+                        <span className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500">
+                          {mod.lessons.length} урока
+                        </span>
+                      </div>
 
-                    <div className="mt-6 pt-5 border-t border-white/5 text-xs font-mono uppercase tracking-[0.25em] text-blue-300/80 group-hover:text-blue-200 transition flex items-center justify-between">
-                      Отвори модула
-                      <span className="transform transition-transform group-hover:translate-x-1">→</span>
+                      <h3 className="text-xl font-semibold text-white leading-snug mb-2 group-hover:text-blue-200 transition">
+                        {mod.title}
+                      </h3>
+                      <p className="text-sm text-gray-500 font-mono tracking-wide uppercase mb-3">
+                        {mod.subtitle}
+                      </p>
+                      <p className="text-gray-400 text-sm leading-relaxed flex-1">
+                        {mod.description}
+                      </p>
+
+                      <div className="mt-6 pt-5 border-t border-white/5 text-xs font-mono uppercase tracking-[0.25em] text-blue-300/80 group-hover:text-blue-200 transition flex items-center justify-between">
+                        Отвори модула
+                        <span className="transform transition-transform group-hover:translate-x-1">→</span>
+                      </div>
                     </div>
                   </div>
                 </Link>

@@ -1,6 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { AppShell } from "@/components/AppShell";
+import { AmbientOrbs } from "@/components/AmbientOrbs";
 import { exercises, type Exercise } from "@/lib/content";
+
+export const metadata: Metadata = {
+  title: "Упражнения",
+  description: "Дневни практики за контрол, дишане и присъствие. Кратко, тихо, всеки ден.",
+};
 
 const categoryLabels: Record<Exercise["category"], { title: string; subtitle: string; symbol: string }> = {
   breath: {
@@ -34,6 +41,7 @@ export default function ExercisesPage() {
 
   return (
     <AppShell>
+      <AmbientOrbs variant="default" />
       <main className="max-w-7xl mx-auto px-6 py-12 md:py-16 relative z-10">
         {/* === Hero === */}
         <section className="fade-up mb-14">

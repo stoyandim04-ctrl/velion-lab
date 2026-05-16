@@ -1,6 +1,14 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { AppShell } from "@/components/AppShell";
+import { AmbientOrbs } from "@/components/AmbientOrbs";
+import { ModuleArtwork } from "@/components/ModuleArtwork";
 import { modules } from "@/lib/content";
+
+export const metadata: Metadata = {
+  title: "Прогрес",
+  description: "Виж докъде си стигнал в програмата. Без бързане. По твое темпо.",
+};
 
 const completedLessonIds = new Set(["1-1", "1-2", "1-3"]);
 
@@ -41,6 +49,7 @@ export default function ProgressPage() {
 
   return (
     <AppShell>
+      <AmbientOrbs variant="default" />
       <main className="max-w-6xl mx-auto px-6 py-12 md:py-16 relative z-10">
         {/* === Hero === */}
         <section className="fade-up mb-14">
@@ -182,9 +191,12 @@ export default function ProgressPage() {
                 <Link
                   key={mod.id}
                   href={`/modules/${mod.id}`}
-                  className="card rounded-2xl p-5 md:p-6 flex items-center gap-5 group"
+                  className="card rounded-2xl p-5 md:p-6 flex items-center gap-5 group relative overflow-hidden"
                 >
-                  <div className="num-badge text-base shrink-0">{mod.number}</div>
+                  <div className="hidden sm:block relative w-20 h-20 shrink-0 rounded-xl overflow-hidden border border-white/5">
+                    <ModuleArtwork moduleId={mod.id} className="absolute inset-0" intensity="subtle" />
+                  </div>
+                  <div className="num-badge text-base shrink-0 sm:hidden">{mod.number}</div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">

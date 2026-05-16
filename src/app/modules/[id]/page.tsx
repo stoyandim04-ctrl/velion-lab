@@ -1,7 +1,24 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { AppShell } from "@/components/AppShell";
+import { AmbientOrbs } from "@/components/AmbientOrbs";
+import { ModuleArtwork } from "@/components/ModuleArtwork";
 import { modules } from "@/lib/content";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const mod = modules.find((m) => m.id === id);
+  if (!mod) return { title: "Модул" };
+  return {
+    title: `${mod.title} · Модул ${mod.number}`,
+    description: mod.description,
+  };
+}
 
 const completedLessonIds = new Set(["1-1", "1-2", "1-3"]);
 
@@ -30,6 +47,7 @@ export default async function ModuleDetailPage({
 
   return (
     <AppShell>
+      <AmbientOrbs variant="soft" />
       <main className="max-w-5xl mx-auto px-6 py-12 md:py-16 relative z-10">
         {/* === Breadcrumb === */}
         <Link
@@ -42,16 +60,19 @@ export default async function ModuleDetailPage({
 
         {/* === Hero === */}
         <section className="fade-up mb-12">
-          <div className="flex items-center gap-5 mb-6">
-            <div className="num-badge text-xl" style={{ width: "3.5rem", height: "3.5rem" }}>
-              {mod.number}
-            </div>
-            <div>
-              <div className="text-xs font-mono uppercase tracking-[0.3em] text-blue-300/80">
-                Модул {mod.number}
-              </div>
-              <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mt-1">
-                {total} урока · ~{total * 9} мин
+          {/* Module signature artwork */}
+          <div className="relative mb-10 rounded-3xl overflow-hidden border border-white/5 glass">
+            <ModuleArtwork moduleId={mod.id} className="aspect-[16/7] md:aspect-[16/6]" />
+            <div className="absolute inset-0 flex items-end p-6 md:p-8">
+              <div className="flex items-center gap-4">
+                <div className="num-badge text-xl" style={{ width: "3.5rem", height: "3.5rem" }}>
+                  {mod.number}
+                </div>
+                <div>
+                  <div className="text-[0.65rem] font-mono uppercase tracking-[0.3em] text-blue-300/80">
+                    Модул {mod.number} · {total} урока · ~{total * 9} мин
+                  </div>
+                </div>
               </div>
             </div>
           </div>

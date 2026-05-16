@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { AppShell } from "@/components/AppShell";
+import { AmbientOrbs } from "@/components/AmbientOrbs";
+import { ModuleArtwork } from "@/components/ModuleArtwork";
 import { modules } from "@/lib/content";
 import {
   Accordion,
@@ -30,6 +32,7 @@ const cardContainer = {
 export default function ModulesPage() {
   return (
     <AppShell>
+      <AmbientOrbs variant="dense" />
       <main className="max-w-7xl mx-auto px-6 py-12 md:py-16 relative z-10">
         {/* === Hero === */}
         <motion.section
@@ -79,9 +82,23 @@ export default function ModulesPage() {
                 >
                   <AccordionItem
                     value={mod.id}
-                    className="card rounded-2xl p-6 md:p-7 border-0 last:border-0 not-last:border-0"
+                    className="card rounded-2xl p-0 border-0 last:border-0 not-last:border-0 overflow-hidden"
                   >
-                    <AccordionTrigger className="!py-0 !border-transparent hover:no-underline group/trigger items-start text-left">
+                    {/* Top artwork strip */}
+                    <div className="relative h-24 md:h-28 overflow-hidden">
+                      <ModuleArtwork moduleId={mod.id} className="absolute inset-0" intensity="subtle" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#080a14]/90" />
+                      <div className="absolute bottom-3 left-6 right-6 flex items-end justify-between">
+                        <span className="text-[0.65rem] font-mono uppercase tracking-[0.3em] text-blue-300/80">
+                          Модул {mod.number}
+                        </span>
+                        <span className="text-[0.65rem] font-mono uppercase tracking-[0.25em] text-gray-500">
+                          {total} урока
+                        </span>
+                      </div>
+                    </div>
+
+                    <AccordionTrigger className="!py-0 !border-transparent hover:no-underline group/trigger items-start text-left p-6 md:p-7">
                       <div className="flex-1 min-w-0 pr-4">
                         {/* Top row */}
                         <div className="flex items-start justify-between gap-4 mb-4 flex-wrap">
@@ -149,7 +166,7 @@ export default function ModulesPage() {
                       </div>
                     </AccordionTrigger>
 
-                    <AccordionContent className="pt-6 mt-2 border-t border-white/5">
+                    <AccordionContent className="px-6 md:px-7 pb-6 md:pb-7 pt-6 mt-2 border-t border-white/5">
                       <div className="mb-4">
                         <span className="eyebrow">Уроците в модула</span>
                       </div>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Logo } from "@/components/Logo";
+import { HeroVideo } from "@/components/HeroVideo";
 import {
   Counter,
   MouseParallax,
@@ -154,10 +155,22 @@ export default function Home() {
       </nav>
 
       {/* === HERO === */}
+      <div className="relative overflow-hidden">
+        {/* Cinematic background video */}
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <HeroVideo
+            src="/videos/hero-bedroom.mp4"
+            className="h-full w-full object-cover opacity-[0.35]"
+          />
+          {/* Vignette + bottom fade so text stays readable */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(4,5,10,0.65)_60%,#04050a_100%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-[#04050a]" />
+        </div>
+
       <motion.section
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
-        className="relative max-w-6xl mx-auto px-6 pt-16 md:pt-24 pb-24 text-center"
+        className="relative z-10 max-w-6xl mx-auto px-6 pt-16 md:pt-24 pb-24 text-center"
       >
         {/* Decorative grid floor */}
         <div className="grid-floor opacity-50" />
@@ -185,7 +198,7 @@ export default function Home() {
           <motion.h1
             variants={fadeUp}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-6 max-w-4xl mx-auto"
+            className="text-4xl sm:text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-6 max-w-4xl mx-auto"
           >
             <span className="shimmer-text">Бавният мъж владее.</span>
             <br />
@@ -262,6 +275,7 @@ export default function Home() {
           </motion.div>
         </motion.div>
       </motion.section>
+      </div>
 
       {/* === Marquee band === */}
       <div className="relative py-10 border-y border-white/5 bg-black/20 backdrop-blur-sm">
@@ -289,7 +303,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl md:text-5xl font-bold leading-[1.1] max-w-3xl mx-auto"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.1] max-w-3xl mx-auto"
             >
               <span className="silver-text">Проблемът рядко е</span>
               <br />
@@ -343,7 +357,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl md:text-5xl font-bold leading-[1.1] max-w-3xl mx-auto"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.1] max-w-3xl mx-auto"
           >
             <span className="silver-text">Бащите ни не казаха.</span>
             <br />
@@ -387,7 +401,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl md:text-5xl font-bold leading-tight max-w-3xl mx-auto"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight max-w-3xl mx-auto"
           >
             <span className="silver-text">Четири неща</span>
             <span className="blue-text"> ще усетиш първи.</span>
@@ -430,7 +444,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl md:text-5xl font-bold leading-tight max-w-3xl mx-auto"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight max-w-3xl mx-auto"
           >
             <span className="silver-text">Осем стъпки.</span>
             <span className="blue-text"> Един резултат.</span>
@@ -485,7 +499,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl md:text-5xl font-bold leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight"
           >
             <span className="silver-text">Какво казват мъжете</span>
             <br />
@@ -531,7 +545,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl md:text-5xl font-bold leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight"
           >
             <span className="silver-text">Това, което</span>
             <span className="blue-text"> питат всички.</span>

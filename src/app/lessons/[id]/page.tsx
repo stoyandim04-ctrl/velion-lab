@@ -1,7 +1,24 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { AppShell } from "@/components/AppShell";
+import { AmbientOrbs } from "@/components/AmbientOrbs";
+import { ModuleArtwork } from "@/components/ModuleArtwork";
 import { modules } from "@/lib/content";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const lesson = modules.flatMap((m) => m.lessons).find((l) => l.id === id);
+  if (!lesson) return { title: "Урок" };
+  return {
+    title: lesson.title,
+    description: lesson.description,
+  };
+}
 
 const completedLessonIds = new Set(["1-1", "1-2", "1-3"]);
 
@@ -32,6 +49,7 @@ export default async function LessonPage({
 
   return (
     <AppShell>
+      <AmbientOrbs variant="single" />
       <main className="max-w-4xl mx-auto px-6 py-12 md:py-16 relative z-10">
         {/* === Breadcrumb === */}
         <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-10 flex-wrap">
@@ -63,26 +81,17 @@ export default async function LessonPage({
           </p>
         </section>
 
-        {/* === Video placeholder === */}
+        {/* === Video placeholder with module artwork === */}
         <section className="fade-up mb-12">
           <div
-            className="card rounded-2xl relative overflow-hidden"
+            className="glass rounded-2xl relative overflow-hidden border border-white/5"
             style={{ aspectRatio: "16 / 9" }}
           >
-            <div
-              className="spotlight"
-              style={{
-                width: "500px",
-                height: "500px",
-                background: "rgba(59, 130, 246, 0.25)",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-            />
+            <ModuleArtwork moduleId={mod.id} className="absolute inset-0" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(4,5,10,0.4)_0%,rgba(4,5,10,0.85)_100%)]" />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
               <div
-                className="w-20 h-20 rounded-full flex items-center justify-center mb-5 border"
+                className="w-20 h-20 rounded-full flex items-center justify-center mb-5 border backdrop-blur-md"
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(37, 99, 235, 0.4) 0%, rgba(15, 29, 74, 0.6) 100%)",
